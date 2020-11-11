@@ -1,6 +1,7 @@
 
 <template>
   <div class="MyMap">
+    <h1>Hello Map</h1>
     <li v-for="commute in commutes" :key="commute.fields">
       <Map :person="commute.fields.name" :img="commute.fields.picture.fields.file.url" :location="commute.fields.whereAmI.lat" />
     </li>

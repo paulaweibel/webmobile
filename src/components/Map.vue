@@ -1,6 +1,7 @@
 
 <template>
   <div class="map">
+    
     <h2>
       {{person}}'s commute
     </h2>

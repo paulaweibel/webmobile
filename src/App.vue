@@ -10,12 +10,24 @@
 </template>
 
 <style>
+:root {
+    --background: rgb(4, 31, 37);
+    --content-background: rgba(21, 21, 21, 0.6);
+    --header: rgba(130, 155, 252, 0.185);
+    --footer: rgb(20, 38, 54);
+
+    --title: rgb(121, 252, 210);
+    --text: rgb(184, 218, 207);
+    --something: rgb(47, 115, 66);
+
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color:var(--text);
 }
 
 #nav {
