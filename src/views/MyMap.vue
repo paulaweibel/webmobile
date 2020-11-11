@@ -21,6 +21,7 @@ import contentfulClient from "@/modules/contentful.js";
 import mapboxgl from "mapbox-gl";
 
 
+
 export default {
   name: "MyMap",
   components: {
@@ -28,7 +29,7 @@ export default {
   },
   data: function () {
     return {
-      accessToken: 'pk.eyJ1IjoiY3JlYXRpbmdvYmxpdmlvbiIsImEiOiJja2gzZzBqdnYwbTF6MndwY2VpNXAzbnUwIn0.hxkyvbh7GaTS7SCOF9eWdA',
+      accessToken: 'pk.eyJ1Ijoid2VpYmVscGF1bGEiLCJhIjoiY2toM2VqazdvMDVybjJ4bnl1NG82ZXZoMyJ9.Zg_IioTXydrTRsz8sYHnCA',
       commutes: [],
     };
   },
@@ -43,13 +44,13 @@ export default {
 
     new mapboxgl.Map({
       container: "mapContainer",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [103.811279, 1.345399],
-      zoom: 12,
-      maxBounds: [
+      style: "mapbox://styles/weibelpaula/ckh8duvzo1apc19s7cjjmpcr0",
+      center: [8.298254, 47.085445],
+      zoom: 13,
+      /*maxBounds: [
         [103.6, 1.1704753],
         [104.1, 1.4754753],
-      ],
+      ],*/
     });
   },
 };
