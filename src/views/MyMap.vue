@@ -2,35 +2,63 @@
 <template>
   <div class="MyMap">
     <h1>Hello Map</h1>
+    <div id="mapContainer" class="basemap" ></div>
     <li v-for="commute in commutes" :key="commute.fields">
-      <Map :person="commute.fields.name" :img="commute.fields.picture.fields.file.url" :location="commute.fields.whereAmI.lat" />
+      <Map
+        :person="commute.fields.name"
+        :img="commute.fields.picture.fields.file.url"
+        :location="commute.fields.whereAmI.lat"
+      />
     </li>
   </div>
 </template>
 
+
 <script>
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
-import contentfulClient from "@/modules/contentful.js"
+import contentfulClient from "@/modules/contentful.js";
+import mapboxgl from "mapbox-gl";
+
 
 export default {
   name: "MyMap",
   components: {
-    Map
+    Map,
   },
-  data: function() {
+  data: function () {
     return {
-      commutes: []
+      accessToken: 'pk.eyJ1IjoiY3JlYXRpbmdvYmxpdmlvbiIsImEiOiJja2gzZzBqdnYwbTF6MndwY2VpNXAzbnUwIn0.hxkyvbh7GaTS7SCOF9eWdA',
+      commutes: [],
     };
   },
-  created: async function() {
+  created: async function () {
     console.log("created a module MyMap");
-    let result = await contentfulClient.getEntries(
-      {content_type : "person"}
-    );
+    let result = await contentfulClient.getEntries({ content_type: "person" });
     this.commutes = result.items;
     console.log(this.commutes);
-  }
+  },
+  mounted: function() {
+    mapboxgl.accessToken = this.accessToken;
+
+    new mapboxgl.Map({
+      container: "mapContainer",
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [103.811279, 1.345399],
+      zoom: 12,
+      maxBounds: [
+        [103.6, 1.1704753],
+        [104.1, 1.4754753],
+      ],
+    });
+  },
 };
 </script>
 
+
+<style scoped>
+  @import url("https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css");
+  #mapContainer{
+    height:500px;
+  }
+</style>
