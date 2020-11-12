@@ -45,7 +45,7 @@ export default {
   mounted: function () {
     mapboxgl.accessToken = this.accessToken;
 
-   var map = new mapboxgl.Map({
+    var map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/weibelpaula/ckh8duvzo1apc19s7cjjmpcr0",
       center: [8.298254, 47.085445],
@@ -53,24 +53,20 @@ export default {
       maxBounds: [
         [8.25739, 47.072158],
         [8.318511, 47.093011],
-        /* [103.6, 1.1704753],
-        [104.1, 1.4754753],*/
       ],
     });
-  
+
     //===========================================
     //Loading GPX Coordinates
     //===========================================
 
-
     //===========================================
     //Creating GPX Trail
     //===========================================
-     // Displaying a GPX track
     // Displaying a GPX track
-    map.on("load", async function() {
+    map.on("load", async function () {
       let result = await contentfulClient.getEntries({
-        content_type: "gpx"
+        content_type: "gpx",
       });
       console.log(result.items);
       let coordinates = await getCoordinatesFromGpxFile(
@@ -78,16 +74,16 @@ export default {
       );
 
       console.log(coordinates);
-      
+
       map.addSource("route", {
         type: "geojson",
         data: {
           type: "Feature",
           geometry: {
             type: "LineString",
-            coordinates: coordinates
-          }
-        }
+            coordinates: coordinates,
+          },
+        },
       });
       map.addLayer({
         id: "route",
@@ -95,21 +91,45 @@ export default {
         source: "route",
         layout: {
           "line-join": "round",
-          "line-cap": "round"
+          "line-cap": "round",
         },
         paint: {
           "line-color": "#61ccc7",
-          "line-width": 5
-        }
+          "line-width": 5,
+        },
       });
+
+      var marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
+        coordinates[0]
+      );
+      marker.getElement().setAttribute("id", "marker");
+      marker.setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"));
+      marker.addTo(map);
+
+      marker.getElement().addEventListener("mouseenter", markerHover);
+
+      function markerHover() {
+        console.log("hovering over marker");
+        marker.remove();
+        marker = new mapboxgl.Marker({ color: "#fff" }).setLngLat(
+          coordinates[0]
+        );
+        marker.addTo(map);
+        marker.getElement().addEventListener("mouseleave", markerNormal);
+      }
+
+      function markerNormal(){
+        console.log("Marker gone");
+        marker.remove();
+        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
+          coordinates[0]
+        );
+        marker.addTo(map);
+        marker.getElement().addEventListener("mouseenter", markerHover);
+      }
     });
-  }
+  },
 };
-
-
-
-
-
 </script>
 
 
