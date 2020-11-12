@@ -57,10 +57,6 @@ export default {
     });
 
     //===========================================
-    //Loading GPX Coordinates
-    //===========================================
-
-    //===========================================
     //Creating GPX Trail
     //===========================================
     // Displaying a GPX track
@@ -68,12 +64,10 @@ export default {
       let result = await contentfulClient.getEntries({
         content_type: "gpx",
       });
-      console.log(result.items);
       let coordinates = await getCoordinatesFromGpxFile(
         result.items[0].fields.gpxFile.fields.file.url // a link to you gpx file in Contentful
       );
 
-      console.log(coordinates);
 
       map.addSource("route", {
         type: "geojson",
@@ -99,6 +93,18 @@ export default {
         },
       });
 
+      let markers = [];
+      let marker;
+      for (let i = 0; i <= 3; i++) {
+        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
+          coordinates[i*15]
+        );
+        marker.getElement().setAttribute("id", "marker");
+        markers[i] = marker;
+        markers[i].addTo(map);
+        markers[i].getElement().addEventListener("mouseenter", function(){markerHover(i)});
+      }
+      /*
       var marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
         coordinates[0]
       );
@@ -106,26 +112,30 @@ export default {
       marker.setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"));
       marker.addTo(map);
 
-      marker.getElement().addEventListener("mouseenter", markerHover);
 
-      function markerHover() {
-        console.log("hovering over marker");
-        marker.remove();
-        marker = new mapboxgl.Marker({ color: "#fff" }).setLngLat(
-          coordinates[0]
-        );
-        marker.addTo(map);
-        marker.getElement().addEventListener("mouseleave", markerNormal);
+      
+      markers.forEach(element => element.getElement().addEventListener("mouseenter", markerHover(element)));
+      */
+
+
+      //===========================================
+      //Marker Event Listeners and Functions
+      //===========================================
+      function markerHover(i) {
+        console.log("hovering over marker " + i);
+        markers[i].remove();
+        marker = new mapboxgl.Marker({ color: "#fff" }).setLngLat(coordinates[i*15]);
+        markers[i] = marker; 
+        markers[i].addTo(map);
+        markers[i].getElement().addEventListener("mouseleave", function(){markerNormal(i)});
       }
 
-      function markerNormal(){
-        console.log("Marker gone");
-        marker.remove();
-        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
-          coordinates[0]
-        );
-        marker.addTo(map);
-        marker.getElement().addEventListener("mouseenter", markerHover);
+      function markerNormal(i) {
+        markers[i].remove();
+        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(coordinates[i*15]);
+        markers[i] = marker; 
+        markers[i].addTo(map);
+        markers[i].getElement().addEventListener("mouseenter", function(){markerHover(i)});
       }
     });
   },
