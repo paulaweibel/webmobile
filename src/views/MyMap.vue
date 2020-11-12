@@ -60,6 +60,11 @@ export default {
 <style scoped>
   @import url("https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css");
   #mapContainer{
-    height:500px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
   }
 </style>

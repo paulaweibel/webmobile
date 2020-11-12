@@ -5,7 +5,7 @@
     <h2>
       {{person}}'s commute
     </h2>
-    <img :src="img" alt="Picture here" width="600px">
+   <!-- <img :src="img" alt="Picture here" width="600px"> -->
     <p>
       This is {{person}}
     </p>

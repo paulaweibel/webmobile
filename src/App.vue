@@ -35,8 +35,10 @@
 }
 
 #nav a {
+  position: relative;
+  z-index: 10;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--text);
 }
 
 #nav a.router-link-exact-active {
