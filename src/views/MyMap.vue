@@ -3,6 +3,7 @@
   <div class="MyMap">
     <h1>Hello Map</h1>
     <div id="mapContainer" class="basemap"></div>
+    <div id="spotlight" class="light"></div>
     <li v-for="commute in commutes" :key="commute.fields">
       <Map
         :person="commute.fields.name"
@@ -14,7 +15,7 @@
 </template>
 
 
-<script>
+<script defer>
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
 import contentfulClient from "@/modules/contentful.js";
@@ -68,7 +69,6 @@ export default {
         result.items[0].fields.gpxFile.fields.file.url // a link to you gpx file in Contentful
       );
 
-
       map.addSource("route", {
         type: "geojson",
         data: {
@@ -88,21 +88,18 @@ export default {
           "line-cap": "round",
         },
         paint: {
-          "line-color": "#61ccc7",
+          "line-color": "#d3cdce",
           "line-width": 5,
         },
       });
 
+      //===========================================
+      //Creating Markers
+      //===========================================
       let markers = [];
       let marker;
       for (let i = 0; i <= 3; i++) {
-        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
-          coordinates[i*15]
-        );
-        marker.getElement().setAttribute("id", "marker");
-        markers[i] = marker;
-        markers[i].addTo(map);
-        markers[i].getElement().addEventListener("mouseenter", function(){markerHover(i)});
+        markerNormal(i);
       }
       /*
       var marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
@@ -117,29 +114,49 @@ export default {
       markers.forEach(element => element.getElement().addEventListener("mouseenter", markerHover(element)));
       */
 
-
       //===========================================
       //Marker Event Listeners and Functions
       //===========================================
       function markerHover(i) {
         console.log("hovering over marker " + i);
         markers[i].remove();
-        marker = new mapboxgl.Marker({ color: "#fff" }).setLngLat(coordinates[i*15]);
-        markers[i] = marker; 
+        marker = new mapboxgl.Marker({ color: "#ff9f51" }).setLngLat(
+          coordinates[i * 15]
+        );
+        markers[i] = marker;
         markers[i].addTo(map);
-        markers[i].getElement().addEventListener("mouseleave", function(){markerNormal(i)});
+        markers[i].getElement().addEventListener("mouseleave", function () {
+          markerNormal(i);
+        });
       }
 
       function markerNormal(i) {
-        markers[i].remove();
-        marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(coordinates[i*15]);
-        markers[i] = marker; 
+        if (markers[i] != null) markers[i].remove();
+        marker = new mapboxgl.Marker({ color: "#d10050" }).setLngLat(
+          coordinates[i * 15]
+        );
+        markers[i] = marker;
         markers[i].addTo(map);
-        markers[i].getElement().addEventListener("mouseenter", function(){markerHover(i)});
+        markers[i].getElement().addEventListener("mouseenter", function () {
+          markerHover(i);
+        });
       }
     });
   },
 };
+
+//===========================================
+//Spotlight
+//===========================================
+
+//Dont know why this spotlight method didn't work
+
+ window.addEventListener("mousemove", (e) => {
+   let string = "radial-gradient(circle at "+ Math.round((e.pageX / window.innerWidth) * 100) + "% "+ Math.round((e.pageY / window.innerHeight) * 100) + "%,transparent 160px,rgba(0, 0, 0, 0.89) 200px)"
+    document.getElementById("spotlight").style.backgroundImage = string;
+  });
+ 
+
 </script>
 
 
@@ -153,6 +170,22 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+#spotlight {
+  z-index: 5;
+  position: absolute;
+  background-image: radial-gradient(
+    circle at 20% 20%,
+    transparent 160px,
+    rgba(0, 0, 0, 0.85) 200px
+  );
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+}
+
 #route {
   z-index: 10;
 }
