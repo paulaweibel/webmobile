@@ -4,7 +4,12 @@
     <h1>Hello Map</h1>
     <div id="mapContainer" class="basemap"></div>
     <div id="spotlight" class="light"></div>
-    <div id="story"></div>
+    <div id="story">
+      <div id="character">
+      </div>
+      
+        <p id="storytext"></p>
+    </div>
     <li v-for="commute in commutes" :key="commute.fields">
       <Map
         :person="commute.fields.name"
@@ -18,6 +23,11 @@
 
 <script defer>
 let storypart = 0;
+let imgCounter = 0; //is used to switch between two images
+let character = document.getElementById("character");
+let storyEnd = true;
+let storyCounter = 0;
+let moveflag = true;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -138,29 +148,17 @@ export default {
       for (let i = 0; i <= 3; i++) {
         markerNormal(i);
       }
-      /*
-      var marker = new mapboxgl.Marker({ color: "#ff0000" }).setLngLat(
-        coordinates[0]
-      );
-      marker.getElement().setAttribute("id", "marker");
-      marker.setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"));
-      marker.addTo(map);
-
-
-      
-      markers.forEach(element => element.getElement().addEventListener("mouseenter", markerHover(element)));
-      */
 
       //===========================================
       //Marker Event Listeners and Functions
       //===========================================
       result = await contentfulClient.getEntries({
-        content_type: "character",
+        content_type: "storyline",
       });
 
       //===========================================
       //Adding Geojson markers from tutorial
-      //===========================================
+
       // add markers to map
       geojson.features.forEach(function (marker) {
         // create a HTML element for each feature
@@ -191,21 +189,23 @@ export default {
       //===========================================
       //My marker methods
       //===========================================
+      //changes marker when hovering over it
       function markerHover(i) {
-        console.log("hovering over marker " + i);
-        markers[i].remove();
+        //console.log("hovering over marker " + i);
+        markers[i].remove(); //delets old marker
         marker = new mapboxgl.Marker({ color: "#ff9f51" }).setLngLat(
           coordinates[i * 15]
         );
         marker.getElement().setAttribute("id", "marker");
         markers[i] = marker;
-        markers[i].addTo(map);
-        let url =
+        markers[i].addTo(map); //adds new marker with the hover colour
+        /*let url =
           "url(" +
-          result.items[0].fields.pictureofcharacter.fields.file.url +
+          result.items[0].fields.img.fields.file.url +
           ")";
 
         markers[i].getElement().style.backgroundImage = url;
+        */
         markers[i].getElement().addEventListener("mouseleave", function () {
           markerNormal(i);
         });
@@ -213,9 +213,9 @@ export default {
           changeView(i);
         });
       }
-
+      //the marker when nothing is hovering over it
       function markerNormal(i) {
-        if (markers[i] != null) markers[i].remove();
+        if (markers[i] != null) markers[i].remove(); //only tries to delete when there is a marker to delete
         marker = new mapboxgl.Marker({ color: "#d10050" }).setLngLat(
           coordinates[i * 15]
         );
@@ -227,42 +227,95 @@ export default {
         });
       }
 
-//Adding Elements to story div
+      //===========================================
+      //Story Methods
+      //===========================================
+      //Adding Elements to story div
+
+    
+
       function changeView(i) {
-        moveflag = false;
-        let backgrounddiv = document.createElement("div");
-        document.getElementById("story").appendChild(backgrounddiv);
-        backgrounddiv.setAttribute("id", "character");
-        console.log(backgrounddiv);
-        if (i == storypart) {
-          backgrounddiv.style.backgroundImage = `url( ${result.items[i].fields.pictureofcharacter.fields.file.url} )`;
-          backgrounddiv.style.height = "100%";
-          backgrounddiv.style.width = "100%";
-          backgrounddiv.style.backgroundColor = "black";
-          backgrounddiv.style.backgroundPosition = "bottom left";
-          backgrounddiv.style.zIndex = "20";
-          backgrounddiv.style.position = "absolute";
-          backgrounddiv.style.backgroundRepeat = "no-repeat";
-          backgrounddiv.style.top = "0px";
-          backgrounddiv.style.left = "0px";
-          
-          console.log("story time");
+        storyEnd = false;
+        console.log(i, storypart);
+        if (i === storypart) {
+          character = document.getElementById("character");
+          console.log("wtf, it gets stuck here and I don't know why")
+          moveflag = false;
+          character.style.zIndex = "25";
+          //console.log("trying to change zindex");
+          //console.log(character.style.getPropertyValue("z-index"));
+          //console.log(character);
+          document.getElementById("story").style.zIndex = "20";
+          storyTelling(i);
+
+          character.addEventListener("click", function () {
+            if (storyEnd == true) {
+              console.log("can move again");
+              console.log(storypart);
+              storyCounter = 0;
+            } else {
+              storyTelling(i);
+            }
+          });
         } else {
           console.log("wrong story part");
         }
-        backgrounddiv.addEventListener("click", function () {
-          console.log("can move again")
-          let story = document.getElementById("story");
-          story.removeChild(story.lastChild);
+      }
+
+      function storyTelling(i) {
+        console.log("trying to tell a story");
+        //console.log(document.getElementById("story"))
+        let textField = document.getElementById("storytext");
+        //splitting text into seperate Elements
+        let fullText = result.items[i].fields.text.content[0].content[0].value;
+        let textElements;
+        textElements = fullText.split("@");
+        //console.log(textElements);
+        //getting images from contentful
+        let imgs = result.items[i].fields.img;
+        //console.log(imgs)
+        //console.log(storyCounter)
+
+        character = document.getElementById("character");
+        textField.innerHTML = textElements[storyCounter];
+        textField.style.zIndex = "21";
+        if (textElements.length === imgs.length) {
+          let url = "url("+ imgs[storyCounter].fields.file.url +")";
+          character.style.backgroundImage = url ;
+        } else {
+          console.log(imgCounter)
+          if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
+            console.log("this should be happening");
+            let url = "url( http:"+ imgs[0].fields.file.url +")";
+            //console.log(url)
+            character.style.backgroundImage = url;
+            //console.log(character);
+            //console.log("after assigning");
+            imgCounter++;
+          } else if(imgCounter == 2 ){
+            let url = "url( 'http:"+ imgs[1].fields.file.url +"')";
+            character.style.backgroundImage = url;
+            imgCounter--;
+          }
+        }
+        if (textElements[storyCounter] === textElements[textElements.length - 1]) {
+          console.log("end of story part")
+          storyEnd = true;
+          storyCounter = 0;
+          imgCounter = 0;
+          character.style.zIndex = "0";
+          document.getElementById("story").style.zIndex = "0";
+          textField.style.zIndex = "0";
           storypart++;
-          console.log(storypart);
           moveflag = true;
-        });
+          
+        } else {
+          storyCounter++;
+        }
       }
     });
   },
 };
-let moveflag = true;
 //===========================================
 //Spotlight
 //===========================================
@@ -270,22 +323,18 @@ let moveflag = true;
 //Dont know why this spotlight method didn't work
 
 window.addEventListener("mousemove", (e) => {
-  if(moveflag == true){
-  spotlightMove(e);
+  if (moveflag == true) {
+    spotlightMove(e);
   }
 });
 function spotlightMove(e) {
-  
-    let string =
+  let string =
     "radial-gradient(circle at " +
     Math.round((e.pageX / window.innerWidth) * 100) +
     "% " +
     Math.round((e.pageY / window.innerHeight) * 100) +
     "%,transparent 160px,rgba(0, 0, 0, 0.89) 200px)";
   document.getElementById("spotlight").style.backgroundImage = string;
-
-  
-  
 }
 </script>
 
@@ -341,13 +390,53 @@ function spotlightMove(e) {
 }
 
 #character {
-  background-color: black;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: bottom left;
   height: 100%;
   width: 100%;
   background-size: 50%;
   bottom: 0px;
   left: 0px;
   position: absolute;
-  z-index: 20;
+  z-index: 0;
+  background-image: unset;
+}
+
+#story{
+  background-color: black;
+  z-index: 0;
+  height: 100%;
+  width:100%;
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+
+#storytext {
+  z-index: 0;
+  display: block;
+  position: absolute;
+  width: 20%;
+  top: 50%;
+  right: 5%;
+  text-align: center;
+  color: azure;
 }
 </style>
+
+
+
+<!--
+console.log(backgrounddiv);
+          backgrounddiv.style.height = "100%";
+          backgrounddiv.style.width = "100%";
+          backgrounddiv.style.backgroundColor = "black";
+          backgrounddiv.style.backgroundPosition = "bottom left";
+          backgrounddiv.style.zIndex = "20";
+          backgrounddiv.style.position = "absolute";
+          backgrounddiv.style.backgroundRepeat = "no-repeat";
+          backgrounddiv.style.top = "0px";
+          backgrounddiv.style.left = "0px";
+          console.log("story time");
+-->
