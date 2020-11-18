@@ -434,6 +434,7 @@ max-width: 200px;
 }
 
 #storytext {
+  font-family: monospace, Helvetica, Arial, sans-serif;
   z-index: 0;
   display: block;
   position: absolute;
