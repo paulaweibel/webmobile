@@ -177,10 +177,11 @@ export default {
 
         let url =
           "url( http:" +
-          result.items[0].fields.pictureofcharacter.fields.file.url +
+          result.items[0].fields.img[0].fields.file.url +
           ")";
         console.log(url);
-        mark.getElement().style.backgroundImage = url;
+       // mark.getElement().style.backgroundImage = url;
+        mark.getElement().style.zIndex = "15";
         mark.addTo(map);
         console.log(mark);
         console.log("should've loaded markers");
@@ -242,6 +243,7 @@ export default {
           console.log("wtf, it gets stuck here and I don't know why")
           moveflag = false;
           character.style.zIndex = "25";
+          console.log("url of background " + result.items[0].fields.background[0].fields.file.url);
           //console.log("trying to change zindex");
           //console.log(character.style.getPropertyValue("z-index"));
           //console.log(character);
@@ -263,7 +265,7 @@ export default {
       }
 
       function storyTelling(i) {
-        console.log("trying to tell a story");
+       // console.log("trying to tell a story");
         //console.log(document.getElementById("story"))
         let textField = document.getElementById("storytext");
         //splitting text into seperate Elements
@@ -285,7 +287,7 @@ export default {
         } else {
           console.log(imgCounter)
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
-            console.log("this should be happening");
+            //console.log("this should be happening");
             let url = "url( http:"+ imgs[0].fields.file.url +")";
             //console.log(url)
             character.style.backgroundImage = url;
