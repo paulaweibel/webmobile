@@ -15,6 +15,7 @@
   --content-background: rgba(21, 21, 21, 0.6);
   --header: rgba(130, 155, 252, 0.185);
   --footer: rgb(20, 38, 54);
+  --markedText: rgb(110, 5, 5);
 
   --title: rgb(121, 252, 210);
   --text: rgb(184, 218, 207);

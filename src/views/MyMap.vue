@@ -149,6 +149,7 @@ export default {
 
         // add markers to map
         geojson.features.forEach(function (marker) {
+          let mark;
           let index = geojson.features.indexOf(marker, 0);
           let url =
             "url(http:" +
@@ -171,18 +172,28 @@ export default {
 
           if(index == 0){
             console.log("first element")
-          }
+            let popup = new mapboxgl.Popup({ closeOnClick: true }).setHTML('<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>').setLngLat([result.items[0].fields.location.lon, result.items[0].fields.location.lat]);
+            popup.addTo(map);
+            popup.getElement().style.fontWeight = "bold"
 
-          // make a marker for each feature and add to the map
-          let mark = new mapboxgl.Marker(el).setLngLat(
+            // make a marker for each feature and add to the map
+          mark = new mapboxgl.Marker(el).setLngLat(
+            marker.geometry.coordinates
+            
+          );
+          } else {
+            // make a marker for each feature and add to the map
+          mark = new mapboxgl.Marker(el).setLngLat(
             marker.geometry.coordinates
           );
+          }
+
 
           
           // mark.getElement().style.backgroundImage = url;
           mark.getElement().style.zIndex = "15";
           mark.getElement().style.backgroundColor = "black";
-          mark.addTo(map);
+          mark.addTo(map); 
           markers[index] = mark;
           //--------------------------------------------------------------------- Event Listeners
           //adding event listener right away
@@ -204,9 +215,9 @@ export default {
       }
       await addingCoordinates();
 
-      for (let i = 0; i < markers.length; i++) {
-        markerNormal(i);
-      }
+//console.log(result.items[0].fields.location.lat, result.items[0].fields.location.lon)
+
+         //   map.fire("click", [8.2900136403198, 47.082168941708 ]);
 
       //===========================================
       //My marker methods
@@ -387,6 +398,15 @@ function spotlightMove(e) {
   border-radius: 50%;
   border: 1px solid gray !important;
   background-color: lightblue !important;
+}
+
+.mapboxgl-popup {
+max-width: 200px;
+}
+
+.mapboxgl-Popup-content{
+  color: red;
+  background-color: red;
 }
 
 #character {
