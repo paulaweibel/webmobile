@@ -405,7 +405,7 @@ function spotlightMove(e) {
 }
 
 #story {
-  background-color: aliceblue;
+  background-color: palevioletred;
   z-index: 0;
   height: 100%;
   width: 100%;
