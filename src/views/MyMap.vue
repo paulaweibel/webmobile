@@ -28,6 +28,7 @@ let character = document.getElementById("character");
 let storyEnd = true;
 let storyCounter = 0;
 let moveflag = true;
+ let logos;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -43,7 +44,7 @@ export default {
   data: function () {
     return {
       accessToken:
-        "pk.eyJ1Ijoid2VpYmVscGF1bGEiLCJhIjoiY2toM2VqazdvMDVybjJ4bnl1NG82ZXZoMyJ9.Zg_IioTXydrTRsz8sYHnCA",
+        "pk.eyJ1IjoiamEtbmVpbiIsImEiOiJja2gzZTg3cHExMzcwMnVvMzE5cWtyb2czIn0.nEY6G_mQjFnai5glV1G2SQ",
       commutes: [],
     };
   },
@@ -62,7 +63,7 @@ export default {
 
     var map = new mapboxgl.Map({
       container: "mapContainer",
-      style: "mapbox://styles/weibelpaula/ckh8duvzo1apc19s7cjjmpcr0",
+      style: "mapbox://styles/ja-nein/ckhen3exh0tvv19p4f52e76c9",
       center: [8.298254, 47.085445],
       zoom: 14,
       maxBounds: [
@@ -108,6 +109,24 @@ export default {
         },
       });
 
+      
+
+      //===========================================
+      //Creating Markers
+      //===========================================
+      let markers = [];
+      //let marker;
+      
+
+      result = await contentfulClient.getEntries({
+        content_type: "storyline",
+      });
+
+     logos = await contentfulClient.getEntries({
+        content_type: "pinLogos",
+      })
+      console.log(logos)
+
       //===========================================
       //geojson markers from mapbox tutorial
       //===========================================
@@ -115,57 +134,40 @@ export default {
       var geojson = {
         type: "FeatureCollection",
         features: [
-          {
-            type: "Feature",
+          
+        ],
+      };
+
+//getting the coordinates from the contentful items and adding obj to geojson.
+    function addingCoordinates(){ 
+       result.items.forEach(element => {
+        let obj = {
+          type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: [8.298254, 47.085445],
+              coordinates: [element.fields.location.lon, element.fields.location.lat],
             },
             properties: {
               title: "Mapbox",
               description: "Center Map",
             },
-          },
-          {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: coordinates[100],
-            },
-            properties: {
-              title: "Mapbox",
-              description: "Another Point",
-            },
-          },
-        ],
-      };
-
-      //===========================================
-      //Creating Markers
-      //===========================================
-      let markers = [];
-      let marker;
-      for (let i = 0; i <= 3; i++) {
-        markerNormal(i);
-      }
-
-      //===========================================
-      //Marker Event Listeners and Functions
-      //===========================================
-      result = await contentfulClient.getEntries({
-        content_type: "storyline",
+        }
+        geojson.features.push(obj)
       });
 
-      //===========================================
-      //Adding Geojson markers from tutorial
-
-      // add markers to map
+       // add markers to map
       geojson.features.forEach(function (marker) {
+        let index = geojson.features.indexOf(marker, 0);
+        console.log(index)
+        let logurl = "url(http:" + logos.items[0].fields.logos[index].fields.file.url + ")";
+        console.log(logurl);
         // create a HTML element for each feature
         var el = document.createElement("div");
         el.className = "marker";
-        el.style.width = "50px";
-        el.style.height = "50px";
+        el.style.width = "30px";
+        el.style.height = "30px";
+        el.style.backgroundSize = "30px"
+        el.style.backgroundImage = logurl;
         el.style.borderRadius = "50%";
         el.style.position = "absolute";
         el.style.zIndex = "4";
@@ -182,17 +184,39 @@ export default {
         console.log(url);
        // mark.getElement().style.backgroundImage = url;
         mark.getElement().style.zIndex = "15";
+        mark.getElement().style.backgroundColor = "black";
         mark.addTo(map);
+        markers[index] = mark;
         console.log(mark);
         console.log("should've loaded markers");
       });
+     }
+     await addingCoordinates();
+     console.log("logging markers")
+    console.log(markers);
+     
+     for (let i = 0; i < markers.length; i++) {
+        markerNormal(i);
+      }
 
       //===========================================
       //My marker methods
       //===========================================
+
+      
+
+      //===========================================
+      //Marker Event Listeners and Functions
+      //===========================================
+
       //changes marker when hovering over it
       function markerHover(i) {
         //console.log("hovering over marker " + i);
+        
+      /*
+       // -------------------------------------
+       // non custom markers
+       // ------------------------------------
         markers[i].remove(); //delets old marker
         marker = new mapboxgl.Marker({ color: "#ff9f51" }).setLngLat(
           coordinates[i * 15]
@@ -200,13 +224,10 @@ export default {
         marker.getElement().setAttribute("id", "marker");
         markers[i] = marker;
         markers[i].addTo(map); //adds new marker with the hover colour
-        /*let url =
-          "url(" +
-          result.items[0].fields.img.fields.file.url +
-          ")";
-
-        markers[i].getElement().style.backgroundImage = url;
-        */
+        
+      */
+     markers[i].getElement().style.boxShadow = "0px 0px 15px red";
+        
         markers[i].getElement().addEventListener("mouseleave", function () {
           markerNormal(i);
         });
@@ -215,7 +236,12 @@ export default {
         });
       }
       //the marker when nothing is hovering over it
+     
+     //-------------------------------
+     //normel marker funktion
+     //-------------------------------
       function markerNormal(i) {
+        /*
         if (markers[i] != null) markers[i].remove(); //only tries to delete when there is a marker to delete
         marker = new mapboxgl.Marker({ color: "#d10050" }).setLngLat(
           coordinates[i * 15]
@@ -223,10 +249,13 @@ export default {
         marker.getElement().setAttribute("id", "marker");
         markers[i] = marker;
         markers[i].addTo(map);
+        */
+       markers[i].getElement().style.boxShadow = "unset";
         markers[i].getElement().addEventListener("mouseenter", function () {
           markerHover(i);
         });
       }
+     
 
       //===========================================
       //Story Methods
@@ -373,7 +402,7 @@ function spotlightMove(e) {
 }
 
 .marker {
-  background-image: "..\assets\police-logo.png";
+  background-color: blue !important;
   background-size: cover;
   background-color: black;
   width: 50px;
