@@ -5,10 +5,9 @@
     <div id="mapContainer" class="basemap"></div>
     <div id="spotlight" class="light"></div>
     <div id="story">
-      <div id="character">
-      </div>
-      
-        <p id="storytext"></p>
+      <div id="character"></div>
+
+      <p id="storytext"></p>
     </div>
     <li v-for="commute in commutes" :key="commute.fields">
       <Map
@@ -28,7 +27,7 @@ let character = document.getElementById("character");
 let storyEnd = true;
 let storyCounter = 0;
 let moveflag = true;
- let logos;
+let logos;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -64,11 +63,11 @@ export default {
     var map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/ja-nein/ckhen3exh0tvv19p4f52e76c9",
-      center: [8.298254, 47.085445],
-      zoom: 14,
+      center: [8.291555, 47.083298],  //   8.286813, 47.082362
+      zoom: 15,
       maxBounds: [
-        [8.25739, 47.072158],
-        [8.318511, 47.093011],
+        [8.277487, 47.073149],    //47.073149, 8.277487
+        [8.306440, 47.088459],   //47.094393, 8.307152
       ],
     });
 
@@ -109,23 +108,19 @@ export default {
         },
       });
 
-      
-
       //===========================================
       //Creating Markers
       //===========================================
       let markers = [];
       //let marker;
-      
 
       result = await contentfulClient.getEntries({
         content_type: "storyline",
       });
 
-     logos = await contentfulClient.getEntries({
+      logos = await contentfulClient.getEntries({
         content_type: "pinLogos",
-      })
-      console.log(logos)
+      });
 
       //===========================================
       //geojson markers from mapbox tutorial
@@ -133,146 +128,118 @@ export default {
       //geojson from mapbox tutorial
       var geojson = {
         type: "FeatureCollection",
-        features: [
-          
-        ],
+        features: [],
       };
 
-//getting the coordinates from the contentful items and adding obj to geojson.
-    function addingCoordinates(){ 
-       result.items.forEach(element => {
-        let obj = {
-          type: "Feature",
+      //getting the coordinates from the contentful items and adding obj to geojson.
+      function addingCoordinates() {
+        result.items.forEach((element) => {
+          let obj = {
+            type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: [element.fields.location.lon, element.fields.location.lat],
+              coordinates: [
+                element.fields.location.lon,
+                element.fields.location.lat,
+              ],
             },
             properties: {
               title: "Mapbox",
               description: "Center Map",
             },
-        }
-        geojson.features.push(obj)
-      });
+          };
+          geojson.features.push(obj);
+        });
 
-       // add markers to map
-      geojson.features.forEach(function (marker) {
-        let index = geojson.features.indexOf(marker, 0);
-        console.log(index)
-        let logurl = "url(http:" + logos.items[0].fields.logos[index].fields.file.url + ")";
-        console.log(logurl);
-        // create a HTML element for each feature
-        var el = document.createElement("div");
-        el.className = "marker";
-        el.style.width = "30px";
-        el.style.height = "30px";
-        el.style.backgroundSize = "30px"
-        el.style.backgroundImage = logurl;
-        el.style.borderRadius = "50%";
-        el.style.position = "absolute";
-        el.style.zIndex = "4";
+        // add markers to map
+        geojson.features.forEach(function (marker) {
+          let index = geojson.features.indexOf(marker, 0);
+          let url =
+            "url(http:" +
+            logos.items[0].fields.logos[index].fields.file.url +
+            ")";
+          // create a HTML element for each feature
+          var el = document.createElement("div");
+          el.className = "marker";
+          el.style.width = "30px";
+          el.style.height = "30px";
+          el.style.backgroundSize = "30px";
+          el.style.backgroundImage = url;
+          el.style.borderRadius = "50%";
+          el.style.position = "absolute";
+          el.style.zIndex = "4";
 
-        // make a marker for each feature and add to the map
-        let mark = new mapboxgl.Marker(el).setLngLat(
-          marker.geometry.coordinates
-        );
+          // make a marker for each feature and add to the map
+          let mark = new mapboxgl.Marker(el).setLngLat(
+            marker.geometry.coordinates
+          );
 
-        let url =
-          "url( http:" +
-          result.items[0].fields.img[0].fields.file.url +
-          ")";
-        console.log(url);
-       // mark.getElement().style.backgroundImage = url;
-        mark.getElement().style.zIndex = "15";
-        mark.getElement().style.backgroundColor = "black";
-        mark.addTo(map);
-        markers[index] = mark;
-        console.log(mark);
-        console.log("should've loaded markers");
-      });
-     }
-     await addingCoordinates();
-     console.log("logging markers")
-    console.log(markers);
-     
-     for (let i = 0; i < markers.length; i++) {
+          
+          // mark.getElement().style.backgroundImage = url;
+          mark.getElement().style.zIndex = "15";
+          mark.getElement().style.backgroundColor = "black";
+          mark.addTo(map);
+          markers[index] = mark;
+          //--------------------------------------------------------------------- Event Listeners
+          //adding event listener right away
+          //----------------------------------------------------
+          markers[index]
+            .getElement()
+            .addEventListener("mouseleave", function () {
+              markerNormal(index);
+            });
+          markers[index].getElement().addEventListener("click", function () {
+            changeView(index);
+          });
+          markers[index]
+            .getElement()
+            .addEventListener("mouseenter", function () {
+              markerHover(index);
+            });
+        });
+      }
+      await addingCoordinates();
+
+      for (let i = 0; i < markers.length; i++) {
         markerNormal(i);
       }
 
       //===========================================
       //My marker methods
       //===========================================
-
-      
-
-      //===========================================
-      //Marker Event Listeners and Functions
-      //===========================================
-
       //changes marker when hovering over it
       function markerHover(i) {
         //console.log("hovering over marker " + i);
-        
-      /*
-       // -------------------------------------
-       // non custom markers
-       // ------------------------------------
-        markers[i].remove(); //delets old marker
-        marker = new mapboxgl.Marker({ color: "#ff9f51" }).setLngLat(
-          coordinates[i * 15]
-        );
-        marker.getElement().setAttribute("id", "marker");
-        markers[i] = marker;
-        markers[i].addTo(map); //adds new marker with the hover colour
-        
-      */
-     markers[i].getElement().style.boxShadow = "0px 0px 15px red";
-        
-        markers[i].getElement().addEventListener("mouseleave", function () {
-          markerNormal(i);
-        });
-        markers[i].getElement().addEventListener("click", function () {
-          changeView(i);
-        });
+        markers[i].getElement().style.boxShadow = "0px 0px 15px red";
+
       }
-      //the marker when nothing is hovering over it
-     
-     //-------------------------------
-     //normel marker funktion
-     //-------------------------------
+
+      //-------------------------------
+      //normel marker funktion
+      //-------------------------------
+      //removing box shadow when nothing is hovering over it
       function markerNormal(i) {
-        /*
-        if (markers[i] != null) markers[i].remove(); //only tries to delete when there is a marker to delete
-        marker = new mapboxgl.Marker({ color: "#d10050" }).setLngLat(
-          coordinates[i * 15]
-        );
-        marker.getElement().setAttribute("id", "marker");
-        markers[i] = marker;
-        markers[i].addTo(map);
-        */
-       markers[i].getElement().style.boxShadow = "unset";
-        markers[i].getElement().addEventListener("mouseenter", function () {
-          markerHover(i);
-        });
+        markers[i].getElement().style.boxShadow = "unset";
+        
       }
-     
 
       //===========================================
       //Story Methods
       //===========================================
       //Adding Elements to story div
 
-    
-
       function changeView(i) {
         storyEnd = false;
-        console.log(i, storypart);
+        //console.log(i, storypart);
         if (i === storypart) {
           character = document.getElementById("character");
-          console.log("wtf, it gets stuck here and I don't know why")
+          console.log("wtf, it gets stuck here and I don't know why");
           moveflag = false;
           character.style.zIndex = "25";
-          console.log("url of background " + result.items[0].fields.background[0].fields.file.url);
+          console.log(
+            "url of background " +
+              result.items[0].fields.background[0].fields.file.url
+          );
           //console.log("trying to change zindex");
           //console.log(character.style.getPropertyValue("z-index"));
           //console.log(character);
@@ -281,8 +248,6 @@ export default {
 
           character.addEventListener("click", function () {
             if (storyEnd == true) {
-              console.log("can move again");
-              console.log(storypart);
               storyCounter = 0;
             } else {
               storyTelling(i);
@@ -294,7 +259,7 @@ export default {
       }
 
       function storyTelling(i) {
-       // console.log("trying to tell a story");
+        // console.log("trying to tell a story");
         //console.log(document.getElementById("story"))
         let textField = document.getElementById("storytext");
         //splitting text into seperate Elements
@@ -311,26 +276,28 @@ export default {
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "21";
         if (textElements.length === imgs.length) {
-          let url = "url("+ imgs[storyCounter].fields.file.url +")";
-          character.style.backgroundImage = url ;
+          let url = "url(" + imgs[storyCounter].fields.file.url + ")";
+          character.style.backgroundImage = url;
         } else {
-          console.log(imgCounter)
+          console.log(imgCounter);
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             //console.log("this should be happening");
-            let url = "url( http:"+ imgs[0].fields.file.url +")";
+            let url = "url( http:" + imgs[0].fields.file.url + ")";
             //console.log(url)
             character.style.backgroundImage = url;
             //console.log(character);
             //console.log("after assigning");
             imgCounter++;
-          } else if(imgCounter == 2 ){
-            let url = "url( 'http:"+ imgs[1].fields.file.url +"')";
+          } else if (imgCounter == 2) {
+            let url = "url( 'http:" + imgs[1].fields.file.url + "')";
             character.style.backgroundImage = url;
             imgCounter--;
           }
         }
-        if (textElements[storyCounter] === textElements[textElements.length - 1]) {
-          console.log("end of story part")
+        if (
+          textElements[storyCounter] === textElements[textElements.length - 1]
+        ) {
+          console.log("end of story part");
           storyEnd = true;
           storyCounter = 0;
           imgCounter = 0;
@@ -339,7 +306,6 @@ export default {
           textField.style.zIndex = "0";
           storypart++;
           moveflag = true;
-          
         } else {
           storyCounter++;
         }
@@ -434,14 +400,14 @@ function spotlightMove(e) {
   background-image: unset;
 }
 
-#story{
+#story {
   background-color: black;
   z-index: 0;
   height: 100%;
-  width:100%;
-  position:absolute;
-  top:0px;
-  left:0px;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
 #storytext {
