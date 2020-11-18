@@ -171,7 +171,7 @@ export default {
           el.style.zIndex = "4";
           el.style.borderStyle = "solid";
           el.style.borderWidth = "var(--borderWidth)";
-el.style.borderColor = "var(--border)"
+          el.style.borderColor = "var(--border)"
 
           // make a marker for each feature and add to the map
           let mark = new mapboxgl.Marker(el).setLngLat(
@@ -241,8 +241,8 @@ el.style.borderColor = "var(--border)"
           moveflag = false;
           character.style.zIndex = "25";
           console.log(
-            "url of background " +
-              result.items[0].fields.background[0].fields.file.url
+            "url of background " 
+             // result.items[0].fields.background[0].fields.file.url
           );
           //console.log("trying to change zindex");
           //console.log(character.style.getPropertyValue("z-index"));
@@ -287,7 +287,7 @@ el.style.borderColor = "var(--border)"
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             //console.log("this should be happening");
             let url = "url( http:" + imgs[0].fields.file.url + ")";
-            //console.log(url)
+            console.log(url)
             character.style.backgroundImage = url;
             //console.log(character);
             //console.log("after assigning");
@@ -405,7 +405,7 @@ function spotlightMove(e) {
 }
 
 #story {
-  background-color: palevioletred;
+  background-color: var(--background);
   z-index: 0;
   height: 100%;
   width: 100%;

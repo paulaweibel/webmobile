@@ -20,8 +20,8 @@
   --text: rgb(184, 218, 207);
   --something: rgb(47, 115, 66);
 
---markerSize: 30px;
-  --markerShadow: rgb(255, 123, 22);
+  --markerSize: 30px;
+  --markerShadow: rgb(255, 22, 22);
   --shadowWidth: 15px;
   --borderWidth: 3px;
   --border: rgb(58, 58, 58);
