@@ -5,21 +5,26 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/mymap">Map</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style>
 :root {
-    --background: rgb(4, 31, 37);
-    --content-background: rgba(21, 21, 21, 0.6);
-    --header: rgba(130, 155, 252, 0.185);
-    --footer: rgb(20, 38, 54);
+  --background: rgb(4, 31, 37);
+  --content-background: rgba(21, 21, 21, 0.6);
+  --header: rgba(130, 155, 252, 0.185);
+  --footer: rgb(20, 38, 54);
 
-    --title: rgb(121, 252, 210);
-    --text: rgb(184, 218, 207);
-    --something: rgb(47, 115, 66);
+  --title: rgb(121, 252, 210);
+  --text: rgb(184, 218, 207);
+  --something: rgb(47, 115, 66);
 
+--markerSize: 30px;
+  --markerShadow: rgb(255, 123, 22);
+  --shadowWidth: 15px;
+  --borderWidth: 3px;
+  --border: rgb(58, 58, 58);
 }
 
 #app {
@@ -27,7 +32,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color:var(--text);
+  color: var(--text);
 }
 
 #nav {
@@ -45,7 +50,7 @@
   color: #42b983;
 }
 
-.body{
+.body {
   background-color: black;
 }
 </style>

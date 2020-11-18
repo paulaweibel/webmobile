@@ -161,13 +161,17 @@ export default {
           // create a HTML element for each feature
           var el = document.createElement("div");
           el.className = "marker";
-          el.style.width = "30px";
-          el.style.height = "30px";
-          el.style.backgroundSize = "30px";
+          el.style.width = "var(--markerSize)";
+          el.style.height = "var(--markerSize)";
+          el.style.backgroundSize = "var(--markerSize)";
           el.style.backgroundImage = url;
+          el.style.backgroundRepeat = "no-repeat";
           el.style.borderRadius = "50%";
           el.style.position = "absolute";
           el.style.zIndex = "4";
+          el.style.borderStyle = "solid";
+          el.style.borderWidth = "var(--borderWidth)";
+el.style.borderColor = "var(--border)"
 
           // make a marker for each feature and add to the map
           let mark = new mapboxgl.Marker(el).setLngLat(
@@ -210,7 +214,7 @@ export default {
       //changes marker when hovering over it
       function markerHover(i) {
         //console.log("hovering over marker " + i);
-        markers[i].getElement().style.boxShadow = "0px 0px 15px red";
+        markers[i].getElement().style.boxShadow = "0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow)";
 
       }
 
