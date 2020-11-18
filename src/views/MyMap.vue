@@ -27,7 +27,6 @@ let character = document.getElementById("character");
 let storyEnd = true;
 let storyCounter = 0;
 let moveflag = true;
-let logos;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -118,9 +117,6 @@ export default {
         content_type: "storyline",
       });
 
-      logos = await contentfulClient.getEntries({
-        content_type: "pinLogos",
-      });
 
       //===========================================
       //geojson markers from mapbox tutorial
@@ -156,7 +152,7 @@ export default {
           let index = geojson.features.indexOf(marker, 0);
           let url =
             "url(http:" +
-            logos.items[0].fields.logos[index].fields.file.url +
+            result.items[index].fields.icon.fields.file.url +
             ")";
           // create a HTML element for each feature
           var el = document.createElement("div");
@@ -172,6 +168,10 @@ export default {
           el.style.borderStyle = "solid";
           el.style.borderWidth = "var(--borderWidth)";
           el.style.borderColor = "var(--border)"
+
+          if(index == 0){
+            console.log("first element")
+          }
 
           // make a marker for each feature and add to the map
           let mark = new mapboxgl.Marker(el).setLngLat(
@@ -219,8 +219,7 @@ export default {
       }
 
       //-------------------------------
-      //normel marker funktion
-      //-------------------------------
+      //normal marker funktion
       //removing box shadow when nothing is hovering over it
       function markerNormal(i) {
         markers[i].getElement().style.boxShadow = "unset";
@@ -334,7 +333,7 @@ function spotlightMove(e) {
     Math.round((e.pageX / window.innerWidth) * 100) +
     "% " +
     Math.round((e.pageY / window.innerHeight) * 100) +
-    "%,transparent 160px,rgba(0, 0, 0, 0.89) 200px)";
+    "%,transparent var(--spotlightTransparent),var(--spotlightColor) var(--spotlightSize))";
   document.getElementById("spotlight").style.backgroundImage = string;
 }
 </script>
@@ -357,8 +356,8 @@ function spotlightMove(e) {
   position: absolute;
   background-image: radial-gradient(
     circle at 20% 20%,
-    transparent 160px,
-    rgba(0, 0, 0, 0.85) 200px
+    transparent var(--spotlightTransparent),
+    var(--spotlightColor) var(--spotlightSize)
   );
   height: 100%;
   width: 100%;

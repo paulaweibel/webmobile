@@ -21,10 +21,14 @@
   --something: rgb(47, 115, 66);
 
   --markerSize: 30px;
-  --markerShadow: rgb(255, 22, 22);
+  --markerShadow: rgb(211, 93, 93);
   --shadowWidth: 15px;
   --borderWidth: 3px;
   --border: rgb(58, 58, 58);
+
+  --spotlightColor: rgba(0, 0, 0, 0.95);
+  --spotlightSize: 150px;
+  --spotlightTransparent: 100px;
 }
 
 #app {
