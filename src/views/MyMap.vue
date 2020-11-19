@@ -32,6 +32,7 @@ let fullText;
 let textElements;
 let textField;
 let trueOnce = true;
+let imgs;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -68,7 +69,7 @@ export default {
       container: "mapContainer",
       style: "mapbox://styles/ja-nein/ckhen3exh0tvv19p4f52e76c9",
       center: [8.286813, 47.082362], //   8.286813, 47.082362
-      zoom: 15,
+      zoom: 15.7,
       maxBounds: [
         [8.277487, 47.073149], //47.073149, 8.277487
         [8.30644, 47.088459], //47.094393, 8.307152
@@ -261,45 +262,46 @@ export default {
           document.getElementById("story").style.backgroundImage = burl;
           document.getElementById("story").style.zIndex = "20";
           if (storypart == 0 && trueOnce)
-            character.addEventListener("click", () => storyEvent(i));
-            trueOnce = false;
+            character.addEventListener("click", () => storyEvent());
+          trueOnce = false;
           storyTelling(i);
         } else {
           console.log("wrong story part");
         }
       }
 
-      function storyEvent(i) {
+      function storyEvent() {
         if (storyEnd == true) {
           storyCounter = 0;
         } else {
-          storyTelling(i);
+          storyTelling();
         }
       }
 
       changeView(0);
-      function storyTelling(i) {
+      function storyTelling() {
         let story = document.getElementById("story");
         textField = document.getElementById("storytext");
-        //splitting text into seperate Elements
-        if (storyCounter == 0 || storyCounter == result.items.length - 1) {
-          fullText = result.items[i].fields.text.content[0].content[0].value;
+
+        if (storyCounter === 0) {
+          //splitting text into seperate Elements
+          if (storyCounter === 0 || storyCounter == result.items.length - 1) {
+            character.setAttribute("class", "intro");
+            story.setAttribute("class", "intro");
+            textField.setAttribute("class", "intro");
+          }
+          fullText =
+            result.items[storypart].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
-          character.setAttribute("class", "intro");
-          story.setAttribute("class", "intro");
-          textField.setAttribute("class", "intro");
+          //getting images from contentful
+          imgs = result.items[storypart].fields.img;
+          //        console.log(imgs);
+          //        console.log("image counter is at: " + imgCounter);
+
+          character = document.getElementById("character");
+          textField.style.zIndex = "30";
         }
-
-        //getting images from contentful
-        let imgs = result.items[storypart].fields.img;
-        console.log(imgs);
-        console.log("image counter is at: " + imgCounter);
-
-        character = document.getElementById("character");
-        textField.innerHTML = textElements[storyCounter];
-        textField.style.zIndex = "30";
-        console.log(storypart);
-        console.log(storyCounter)
+          textField.innerHTML = textElements[storyCounter];
 
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
@@ -347,7 +349,7 @@ export default {
           moveflag = true;
           if (storypart >= result.items.length) {
             storypart = 0;
-            changeView(0);
+            changeView(storypart);
           }
         } else {
           storyCounter += 1;
@@ -449,7 +451,6 @@ function spotlightMove(e) {
 }
 
 #character.other.story3 {
-
 }
 
 #story {
