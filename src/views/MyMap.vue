@@ -31,6 +31,7 @@ let moveflag = true;
 let fullText;
 let textElements;
 let textField;
+let trueOnce = true;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -175,8 +176,8 @@ export default {
           if (index == 0) {
             let popup = new mapboxgl.Popup({ closeOnClick: true })
               .setHTML(
-                '<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>'
-                +'<p style="color:var(--markedText)">and follow the path</p>'
+                '<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>' +
+                  '<p style="color:var(--markedText)">and follow the path</p>'
               )
               .setLngLat([
                 result.items[1].fields.location.lon,
@@ -259,9 +260,9 @@ export default {
             "')";
           document.getElementById("story").style.backgroundImage = burl;
           document.getElementById("story").style.zIndex = "20";
-          if (storypart == 0)
+          if (storypart == 0 && trueOnce)
             character.addEventListener("click", () => storyEvent(i));
-
+            trueOnce = false;
           storyTelling(i);
         } else {
           console.log("wrong story part");
@@ -281,7 +282,7 @@ export default {
         let story = document.getElementById("story");
         textField = document.getElementById("storytext");
         //splitting text into seperate Elements
-        if (storyCounter == 0 || storyCounter == result.items.length -1) {
+        if (storyCounter == 0 || storyCounter == result.items.length - 1) {
           fullText = result.items[i].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
           character.setAttribute("class", "intro");
@@ -297,7 +298,8 @@ export default {
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "30";
-        console.log(storypart)
+        console.log(storypart);
+        console.log(storyCounter)
 
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
@@ -306,7 +308,7 @@ export default {
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             let url = "url( http:" + imgs[0].fields.file.url + ")";
             //changing classes
-            if (storypart != 0 && storyCounter != result.items.length -1) {
+            if (storypart != 0 && storyCounter != result.items.length - 1) {
               character.setAttribute("class", "purrlock story" + storypart);
               story.setAttribute("class", "purrlock story" + storypart);
               textField.setAttribute("class", "purrlock story" + storypart);
@@ -314,7 +316,7 @@ export default {
             character.style.backgroundImage = url;
             imgCounter++;
           } else if (imgCounter == 2) {
-            if (storypart != 0 && storyCounter != result.items.length -1) {
+            if (storypart != 0 && storyCounter != result.items.length - 1) {
               character.setAttribute(
                 "class",
                 "other " + imgs[1].fields.file.fileName + " story" + storypart
@@ -343,6 +345,10 @@ export default {
           textField.style.zIndex = "0";
           storypart++;
           moveflag = true;
+          if (storypart >= result.items.length) {
+            storypart = 0;
+            changeView(0);
+          }
         } else {
           storyCounter += 1;
           console.log("story counter is increased here");
@@ -439,8 +445,7 @@ function spotlightMove(e) {
   background-image: unset;
 }
 
-#character.purrlock.story2{
-  
+#character.purrlock.story2 {
 }
 
 #story {
@@ -473,9 +478,9 @@ function spotlightMove(e) {
   font-family: FilmNoir;
   color: white;
   font-size: 3em;
-  width:100%;
-  top:30%;
-  left:0;
+  width: 100%;
+  top: 30%;
+  left: 0;
   transition: 1s all;
 }
 </style>
