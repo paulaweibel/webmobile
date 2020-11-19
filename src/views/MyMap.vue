@@ -516,7 +516,9 @@ function spotlightMove(e) {
   background-image: unset;
 }
 
-#character.purrlock.story2 {
+#character.other.story1 {
+    background-position: bottom right;
+
 }
 
 #character.other {
@@ -553,7 +555,9 @@ function spotlightMove(e) {
   right: 35%;
   text-align: center;
   padding: 20px;
-  background-color: whitesmoke;
+  border: solid black;
+  border-width: 1px;
+  background-color: white;
   color: black;
 }
 
