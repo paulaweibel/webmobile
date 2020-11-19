@@ -51,6 +51,7 @@
 
 #nav a {
   font-size: 1.5em;
+  padding-left: 2%;
   position: relative;
   z-index: 50;
   /* font-weight: bold; */
