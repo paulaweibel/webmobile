@@ -281,7 +281,7 @@ export default {
         let story = document.getElementById("story");
         textField = document.getElementById("storytext");
         //splitting text into seperate Elements
-        if (storyCounter == 0) {
+        if (storyCounter == 0 || storyCounter == result.items.length -1) {
           fullText = result.items[i].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
           character.setAttribute("class", "intro");
@@ -296,7 +296,7 @@ export default {
 
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
-        textField.style.zIndex = "21";
+        textField.style.zIndex = "30";
 
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
@@ -305,7 +305,7 @@ export default {
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             let url = "url( http:" + imgs[0].fields.file.url + ")";
             //changing classes
-            if (storypart != 0) {
+            if (storypart != 0 && storyCounter != result.items.length -1) {
               character.setAttribute("class", "purrlock");
               story.setAttribute("class", "purrlock");
               textField.setAttribute("class", "purrlock");
@@ -313,7 +313,7 @@ export default {
             character.style.backgroundImage = url;
             imgCounter++;
           } else if (imgCounter == 2) {
-            if (storypart != 0) {
+            if (storypart != 0 && storyCounter != result.items.length -1) {
               character.setAttribute(
                 "class",
                 "other, " + imgs[1].fields.file.fileName
