@@ -67,7 +67,7 @@ export default {
     var map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/ja-nein/ckhen3exh0tvv19p4f52e76c9",
-      center: [8.291555, 47.083298], //   8.286813, 47.082362
+      center: [8.286813, 47.082362], //   8.286813, 47.082362
       zoom: 15,
       maxBounds: [
         [8.277487, 47.073149], //47.073149, 8.277487
@@ -107,7 +107,7 @@ export default {
           "line-cap": "round",
         },
         paint: {
-          "line-color": "#d3cdce",
+          "line-color": "#E1BC29",
           "line-width": 5,
         },
       });

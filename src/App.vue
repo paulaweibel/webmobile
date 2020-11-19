@@ -15,14 +15,14 @@
   --content-background: rgba(21, 21, 21, 0.6);
   --header: rgba(130, 155, 252, 0.185);
   --footer: rgb(20, 38, 54);
-  --markedText: rgb(110, 5, 5);
+  --markedText: rgb(10, 7, 7);
 
   --title: rgb(121, 252, 210);
   --text: rgb(255, 255, 255);
   --something: rgb(47, 115, 66);
 
   --markerSize: 30px;
-  --markerShadow: rgb(211, 93, 93);
+  --markerShadow: #E1BC29;
   --shadowWidth: 15px;
   --borderWidth: 3px;
   --border: rgb(58, 58, 58);
