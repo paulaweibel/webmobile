@@ -297,6 +297,7 @@ export default {
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "30";
+        console.log(storypart)
 
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
@@ -306,9 +307,9 @@ export default {
             let url = "url( http:" + imgs[0].fields.file.url + ")";
             //changing classes
             if (storypart != 0 && storyCounter != result.items.length -1) {
-              character.setAttribute("class", "purrlock");
-              story.setAttribute("class", "purrlock");
-              textField.setAttribute("class", "purrlock");
+              character.setAttribute("class", "purrlock story" + storypart);
+              story.setAttribute("class", "purrlock story" + storypart);
+              textField.setAttribute("class", "purrlock story" + storypart);
             }
             character.style.backgroundImage = url;
             imgCounter++;
@@ -316,15 +317,15 @@ export default {
             if (storypart != 0 && storyCounter != result.items.length -1) {
               character.setAttribute(
                 "class",
-                "other, " + imgs[1].fields.file.fileName
+                "other " + imgs[1].fields.file.fileName + " story" + storypart
               );
               story.setAttribute(
                 "class",
-                "other, " + imgs[1].fields.file.fileName
+                "other " + imgs[1].fields.file.fileName + " story" + storypart
               );
               textField.setAttribute(
                 "class",
-                "other, " + imgs[1].fields.file.fileName
+                "other " + imgs[1].fields.file.fileName + " story" + storypart
               );
             }
             let url = "url( 'http:" + imgs[1].fields.file.url + "')";
@@ -438,6 +439,10 @@ function spotlightMove(e) {
   background-image: unset;
 }
 
+#character.purrlock.story2{
+  
+}
+
 #story {
   background-color: var(--background);
   background-size: 100% 100%;
@@ -452,6 +457,7 @@ function spotlightMove(e) {
 }
 
 #storytext {
+  pointer-events: none;
   font-family: monospace, Helvetica, Arial, sans-serif;
   z-index: 0;
   display: block;
