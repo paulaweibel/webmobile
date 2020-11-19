@@ -71,23 +71,26 @@
 
       <div class="about-text">
         <p class="about-title">Follow the adventures of Purrlock Holmes!</p>
-        <p class="credit-infos">
+        <p class="about-infos">
           Click through the trail to find the mysterious thief. <br /><br />
           This is an interactive trailer to a full story that may be published at
           some time. The trail leads through the wild streets of Rossmoos
           Quarter in Emmenbrücke (Switzerland). <br /><br />
           The story is based on true events. Told by Mr. Purrlock. But confused
-          experts insist, the legends of purrlock didn't happen. <br /><br />
+          experts insist, the legends of purrlock have never happened. <br /><br />
           eh!<br /><br />
           what do they know.<br /><br />
           (meowthing at all.)
         </p>
         <p class="about-title">*FLUFF*</p>
-        <p class="credit-infos">
-          Credits: <br />Janine Richener, Lena Schütz, Paula Weibel <br />
+        
+      </div>
+    </div>
+    <div class="credit"> 
+      <p class="credit-infos">
+          Credits: <br> <br>Janine Richener, Lena Schütz, Paula Weibel <br />
           Studio Web-Mobile, 2020
         </p>
-      </div>
     </div>
   </div>
 </template>
@@ -108,19 +111,32 @@
   font-size: 3em;
   padding: 10px;
   color: black;
-  
 }
 
 .about-title{
 background-color: white;
 }
 
-.credit-infos {
+.about-infos {
   font-family: monospace;
   font-size: 0.5em;
   max-width: 500px;
 }
 
+.credit{
+  font-family: monospace;
+  font-size: 1.2em;
+  position: absolute;
+  height: 7em;
+  width:100%;
+  top: calc(60px + 3em + 61vw + 100vh);
+  left:0px;
+  background-color: black;
+  overflow: hidden;
+  text-align: left;
+  padding: 0 0 0 8vw;
+
+}
 .about-background {
   position: absolute;
   top: 0;

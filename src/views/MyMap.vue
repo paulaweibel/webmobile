@@ -450,7 +450,8 @@ function spotlightMove(e) {
 #character.purrlock.story2 {
 }
 
-#character.other.story3 {
+#character.other {
+  background-position: bottom left;
 }
 
 #story {
