@@ -453,8 +453,10 @@ function spotlightMove(e) {
 }
 
 #story {
+  overflow: hidden;
   background-color: var(--background);
-  background-size: 100% 100%;
+  background-position: center;
+  background-size: auto 100%;
   overflow: auto;
   background-repeat: no-repeat;
   z-index: 0;
