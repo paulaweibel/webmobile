@@ -28,6 +28,10 @@ let storyEnd = true;
 let storyCounter = 0;
 let moveflag = true;
 
+let fullText;
+        let textElements;
+        let textField;
+
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
 import contentfulClient from "@/modules/contentful.js";
@@ -155,6 +159,9 @@ export default {
             "url(http:" +
             result.items[index].fields.icon.fields.file.url +
             ")";
+
+
+
           // create a HTML element for each feature
           var el = document.createElement("div");
           el.className = "marker";
@@ -250,37 +257,40 @@ export default {
           console.log("wtf, it gets stuck here and I don't know why");
           moveflag = false;
           character.style.zIndex = "25";
-          console.log(
-            "url of background " 
-             // result.items[0].fields.background[0].fields.file.url
-          );
+          let burl = "url( 'http:"+ result.items[i].fields.background.fields.file.url + "')";
+          document.getElementById("story").style.backgroundImage = burl;
           //console.log("trying to change zindex");
           //console.log(character.style.getPropertyValue("z-index"));
           //console.log(character);
           document.getElementById("story").style.zIndex = "20";
+          if(storypart == 0) character.addEventListener("click", () => storyEvent(i));
+          
           storyTelling(i);
-
-          character.addEventListener("click", function () {
-            if (storyEnd == true) {
-              storyCounter = 0;
-            } else {
-              storyTelling(i);
-            }
-          });
         } else {
           console.log("wrong story part");
         }
       }
 
+      function storyEvent(i){
+            if (storyEnd == true) {
+              storyCounter = 0;
+            } else {
+              storyTelling(i);
+            }
+      }
+
       function storyTelling(i) {
         // console.log("trying to tell a story");
         //console.log(document.getElementById("story"))
-        let textField = document.getElementById("storytext");
+        textField = document.getElementById("storytext");
         //splitting text into seperate Elements
-        let fullText = result.items[i].fields.text.content[0].content[0].value;
-        let textElements;
-        textElements = fullText.split("@");
-        //console.log(textElements);
+        if(storyCounter == 0){
+           fullText = result.items[i].fields.text.content[0].content[0].value;
+          textElements = fullText.split("@");
+          console.log(textElements);
+
+        }
+        
         //getting images from contentful
         let imgs = result.items[i].fields.img;
         //console.log(imgs)
@@ -289,15 +299,16 @@ export default {
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "21";
+        console.log(storyCounter + " Story counter and length textElements: " + textElements.length)
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
           character.style.backgroundImage = url;
         } else {
-          console.log(imgCounter);
+          //console.log(imgCounter);
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             //console.log("this should be happening");
             let url = "url( http:" + imgs[0].fields.file.url + ")";
-            console.log(url)
+            //console.log(url)
             character.style.backgroundImage = url;
             //console.log(character);
             //console.log("after assigning");
@@ -309,19 +320,25 @@ export default {
           }
         }
         if (
-          textElements[storyCounter] === textElements[textElements.length - 1]
+          storyCounter >= textElements.length
         ) {
           console.log("end of story part");
           storyEnd = true;
           storyCounter = 0;
           imgCounter = 0;
+          character.removeEventListener("click", () => {
+            console.log("eventlistener removed")
+          });
+          console.log("should've been removed")
+
           character.style.zIndex = "0";
           document.getElementById("story").style.zIndex = "0";
           textField.style.zIndex = "0";
           storypart++;
           moveflag = true;
         } else {
-          storyCounter++;
+          storyCounter+=1;
+          console.log("story counter is increased here")
         }
       }
     });
@@ -382,9 +399,7 @@ function spotlightMove(e) {
 }
 
 .marker {
-  background-color: blue !important;
   background-size: cover;
-  background-color: black;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -396,18 +411,12 @@ function spotlightMove(e) {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  border: 1px solid gray !important;
-  background-color: lightblue !important;
 }
 
 .mapboxgl-popup {
 max-width: 200px;
 }
 
-.mapboxgl-Popup-content{
-  color: red;
-  background-color: red;
-}
 
 #character {
   background-color: transparent;
@@ -425,6 +434,9 @@ max-width: 200px;
 
 #story {
   background-color: var(--background);
+  background-size: 100% 100%;
+  overflow: auto;
+  background-repeat: no-repeat;
   z-index: 0;
   height: 100%;
   width: 100%;
