@@ -454,6 +454,10 @@ function spotlightMove(e) {
   background-position: bottom left;
 }
 
+#character.other.story3 {
+    background-position: bottom right;
+}
+
 #story {
   overflow: hidden;
   background-color: var(--background);
