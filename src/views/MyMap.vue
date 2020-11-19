@@ -464,7 +464,13 @@ function spotlightMove(e) {
 }
 
 #storytext.intro {
-  color: red;
+  font-family: FilmNoir;
+  color: white;
+  font-size: 3em;
+  width:100%;
+  top:30%;
+  left:0;
+  transition: 1s all;
 }
 </style>
 
