@@ -11,7 +11,7 @@
 
 <style>
 :root {
-  --background: rgb(4, 31, 37);
+  --background: rgb(0, 0, 0);
   --content-background: rgba(21, 21, 21, 0.6);
   --header: rgba(130, 155, 252, 0.185);
   --footer: rgb(20, 38, 54);
