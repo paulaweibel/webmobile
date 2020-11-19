@@ -432,8 +432,8 @@ function spotlightMove(e) {
   height: 100%;
   width: 100%;
   background-size: 50%;
-  bottom: 0px;
-  left: 0px;
+  bottom: -150px;
+  left: -50px;
   position: absolute;
   z-index: 0;
   background-image: unset;
@@ -462,9 +462,9 @@ function spotlightMove(e) {
   z-index: 0;
   display: block;
   position: absolute;
-  width: 20%;
-  top: 50%;
-  right: 5%;
+  width: 50%;
+  top: 20%;
+  right: 10%;
   text-align: center;
   color: azure;
 }
