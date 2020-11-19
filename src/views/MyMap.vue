@@ -310,7 +310,7 @@ export default {
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
             let url = "url( http:" + imgs[0].fields.file.url + ")";
             //changing classes
-            if (storypart != 0 && storyCounter != result.items.length - 1) {
+            if (storypart != 0 && storyCounter != result.items.length) {
               character.setAttribute("class", "purrlock story" + storypart);
               story.setAttribute("class", "purrlock story" + storypart);
               textField.setAttribute("class", "purrlock story" + storypart);
