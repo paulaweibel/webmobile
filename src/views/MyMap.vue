@@ -175,7 +175,7 @@ export default {
           el.style.borderColor = "var(--border)";
 
           if (index == 0) {
-            let popup = new mapboxgl.Popup({ closeOnClick: true })
+            let popup = new mapboxgl.Popup({ closeOnClick: false })
               .setHTML(
                 '<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>' +
                   '<p style="color:var(--markedText)">and follow the path</p>'
@@ -223,6 +223,67 @@ export default {
       }
       await addingCoordinates();
 
+      /*
+     //use this to make a separate marker that is absolutely intependent of the others.
+let purrlock;
+let purrlockmark;
+     //this in adding coordinates method
+            purrlock = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [
+                  8.286813, 47.082362
+                ],
+              },
+              properties: {
+                title: "Mapbox",
+                description: "Center Map",
+              },
+            },
+          ],
+        };
+      await purrlockMarker();
+
+      function purrlockMarker() {
+        let mark;
+        let url =
+          "url(http:" + result.items[1].fields.icon.fields.file.url + ")";
+
+        // create a HTML element for each feature
+        var el = document.createElement("div");
+        el.className = "marker";
+        el.style.width = "var(--markerSize)";
+        el.style.height = "var(--markerSize)";
+        el.style.backgroundSize = "var(--markerSize)";
+        el.style.backgroundImage = url;
+        el.style.backgroundRepeat = "no-repeat";
+        el.style.backgroundColor = "transparent";
+        el.style.borderRadius = "50%";
+        el.style.position = "absolute";
+        el.style.zIndex = "4";
+
+          // make a marker for each feature and add to the map
+          mark = new mapboxgl.Marker(el).setLngLat(
+            purrlock.features[0].geometry.coordinates
+          );
+          // make a marker for each feature and add to the map
+          mark = new mapboxgl.Marker(el).setLngLat(
+            purrlock.features[0].geometry.coordinates
+          );
+        
+
+        // mark.getElement().style.backgroundImage = url;
+        mark.getElement().style.zIndex = "15";
+        mark.getElement().style.backgroundColor = "black";
+        mark.addTo(map);
+        purrlockmark = mark;
+      console.log(purrlockmark);
+      }
+     */
       //console.log(result.items[0].fields.location.lat, result.items[0].fields.location.lon)
 
       //   map.fire("click", [8.2900136403198, 47.082168941708 ]);
@@ -261,9 +322,12 @@ export default {
             "')";
           document.getElementById("story").style.backgroundImage = burl;
           document.getElementById("story").style.zIndex = "20";
-          if (storypart == 0 && trueOnce)
+
+          if (storypart == 0 && trueOnce) {
             character.addEventListener("click", () => storyEvent());
-          trueOnce = false;
+            trueOnce = false;
+          }
+
           storyTelling(i);
         } else {
           console.log("wrong story part");
@@ -301,7 +365,7 @@ export default {
           character = document.getElementById("character");
           textField.style.zIndex = "30";
         }
-          textField.innerHTML = textElements[storyCounter];
+        textField.innerHTML = textElements[storyCounter];
 
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
@@ -345,9 +409,11 @@ export default {
           character.style.zIndex = "0";
           document.getElementById("story").style.zIndex = "0";
           textField.style.zIndex = "0";
-          let url = "url('http:"+result.items[storypart].fields.crossedIcons.fields.file.url+"')";
+          let url =
+            "url('http:" +
+            result.items[storypart].fields.crossedIcons.fields.file.url +
+            "')";
           markers[storypart].getElement().style.backgroundImage = url;
-          markers[storypart].getElement().style.backgroundColor = "red";
           storypart++;
           moveflag = true;
           if (storypart >= result.items.length) {
@@ -458,7 +524,7 @@ function spotlightMove(e) {
 }
 
 #character.other.story3 {
-    background-position: bottom right;
+  background-position: bottom right;
 }
 
 #story {
