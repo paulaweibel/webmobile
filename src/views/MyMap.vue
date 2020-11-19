@@ -29,8 +29,8 @@ let storyCounter = 0;
 let moveflag = true;
 
 let fullText;
-        let textElements;
-        let textField;
+let textElements;
+let textField;
 
 // @ is an alias to /src
 import Map from "@/components/Map.vue";
@@ -66,11 +66,11 @@ export default {
     var map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/ja-nein/ckhen3exh0tvv19p4f52e76c9",
-      center: [8.291555, 47.083298],  //   8.286813, 47.082362
+      center: [8.291555, 47.083298], //   8.286813, 47.082362
       zoom: 15,
       maxBounds: [
-        [8.277487, 47.073149],    //47.073149, 8.277487
-        [8.306440, 47.088459],   //47.094393, 8.307152
+        [8.277487, 47.073149], //47.073149, 8.277487
+        [8.30644, 47.088459], //47.094393, 8.307152
       ],
     });
 
@@ -121,7 +121,6 @@ export default {
         content_type: "storyline",
       });
 
-
       //===========================================
       //geojson markers from mapbox tutorial
       //===========================================
@@ -156,11 +155,7 @@ export default {
           let mark;
           let index = geojson.features.indexOf(marker, 0);
           let url =
-            "url(http:" +
-            result.items[index].fields.icon.fields.file.url +
-            ")";
-
-
+            "url(http:" + result.items[index].fields.icon.fields.file.url + ")";
 
           // create a HTML element for each feature
           var el = document.createElement("div");
@@ -175,32 +170,36 @@ export default {
           el.style.zIndex = "4";
           el.style.borderStyle = "solid";
           el.style.borderWidth = "var(--borderWidth)";
-          el.style.borderColor = "var(--border)"
+          el.style.borderColor = "var(--border)";
 
-          if(index == 0){
-            console.log("first element")
-            let popup = new mapboxgl.Popup({ closeOnClick: true }).setHTML('<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>').setLngLat([result.items[0].fields.location.lon, result.items[0].fields.location.lat]);
+          if (index == 0) {
+            console.log("first element");
+            let popup = new mapboxgl.Popup({ closeOnClick: true })
+              .setHTML(
+                '<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>'
+              )
+              .setLngLat([
+                result.items[0].fields.location.lon,
+                result.items[0].fields.location.lat,
+              ]);
             popup.addTo(map);
-            popup.getElement().style.fontWeight = "bold"
+            popup.getElement().style.fontWeight = "bold";
 
             // make a marker for each feature and add to the map
-          mark = new mapboxgl.Marker(el).setLngLat(
-            marker.geometry.coordinates
-            
-          );
+            mark = new mapboxgl.Marker(el).setLngLat(
+              marker.geometry.coordinates
+            );
           } else {
             // make a marker for each feature and add to the map
-          mark = new mapboxgl.Marker(el).setLngLat(
-            marker.geometry.coordinates
-          );
+            mark = new mapboxgl.Marker(el).setLngLat(
+              marker.geometry.coordinates
+            );
           }
 
-
-          
           // mark.getElement().style.backgroundImage = url;
           mark.getElement().style.zIndex = "15";
           mark.getElement().style.backgroundColor = "black";
-          mark.addTo(map); 
+          mark.addTo(map);
           markers[index] = mark;
           //--------------------------------------------------------------------- Event Listeners
           //adding event listener right away
@@ -222,9 +221,9 @@ export default {
       }
       await addingCoordinates();
 
-//console.log(result.items[0].fields.location.lat, result.items[0].fields.location.lon)
+      //console.log(result.items[0].fields.location.lat, result.items[0].fields.location.lon)
 
-         //   map.fire("click", [8.2900136403198, 47.082168941708 ]);
+      //   map.fire("click", [8.2900136403198, 47.082168941708 ]);
 
       //===========================================
       //My marker methods
@@ -232,8 +231,8 @@ export default {
       //changes marker when hovering over it
       function markerHover(i) {
         //console.log("hovering over marker " + i);
-        markers[i].getElement().style.boxShadow = "0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow)";
-
+        markers[i].getElement().style.boxShadow =
+          "0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow)";
       }
 
       //-------------------------------
@@ -241,7 +240,6 @@ export default {
       //removing box shadow when nothing is hovering over it
       function markerNormal(i) {
         markers[i].getElement().style.boxShadow = "unset";
-        
       }
 
       //===========================================
@@ -254,29 +252,33 @@ export default {
         //console.log(i, storypart);
         if (i === storypart) {
           character = document.getElementById("character");
-          console.log("wtf, it gets stuck here and I don't know why");
+          //console.log("wtf, it gets stuck here and I don't know why");
           moveflag = false;
           character.style.zIndex = "25";
-          let burl = "url( 'http:"+ result.items[i].fields.background.fields.file.url + "')";
+          let burl =
+            "url( 'http:" +
+            result.items[i].fields.background.fields.file.url +
+            "')";
           document.getElementById("story").style.backgroundImage = burl;
           //console.log("trying to change zindex");
           //console.log(character.style.getPropertyValue("z-index"));
           //console.log(character);
           document.getElementById("story").style.zIndex = "20";
-          if(storypart == 0) character.addEventListener("click", () => storyEvent(i));
-          
+          if (storypart == 0)
+            character.addEventListener("click", () => storyEvent(i));
+
           storyTelling(i);
         } else {
           console.log("wrong story part");
         }
       }
 
-      function storyEvent(i){
-            if (storyEnd == true) {
-              storyCounter = 0;
-            } else {
-              storyTelling(i);
-            }
+      function storyEvent(i) {
+        if (storyEnd == true) {
+          storyCounter = 0;
+        } else {
+          storyTelling(i);
+        }
       }
 
       function storyTelling(i) {
@@ -284,22 +286,25 @@ export default {
         //console.log(document.getElementById("story"))
         textField = document.getElementById("storytext");
         //splitting text into seperate Elements
-        if(storyCounter == 0){
-           fullText = result.items[i].fields.text.content[0].content[0].value;
+        if (storyCounter == 0) {
+          fullText = result.items[i].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
-          console.log(textElements);
-
+          //console.log(textElements);
         }
-        
+
         //getting images from contentful
-        let imgs = result.items[i].fields.img;
-        //console.log(imgs)
+        let imgs = result.items[storypart].fields.img;
         //console.log(storyCounter)
+        console.log("image counter is at: " + imgCounter);
 
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "21";
-        console.log(storyCounter + " Story counter and length textElements: " + textElements.length)
+        console.log(
+          storyCounter +
+            " Story counter and length textElements: " +
+            textElements.length
+        );
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
           character.style.backgroundImage = url;
@@ -319,31 +324,25 @@ export default {
             imgCounter--;
           }
         }
-        if (
-          storyCounter >= textElements.length
-        ) {
+        if (storyCounter >= textElements.length) {
           console.log("end of story part");
           storyEnd = true;
           storyCounter = 0;
           imgCounter = 0;
-          character.removeEventListener("click", () => {
-            console.log("eventlistener removed")
-          });
-          console.log("should've been removed")
-
           character.style.zIndex = "0";
           document.getElementById("story").style.zIndex = "0";
           textField.style.zIndex = "0";
           storypart++;
           moveflag = true;
         } else {
-          storyCounter+=1;
-          console.log("story counter is increased here")
+          storyCounter += 1;
+          console.log("story counter is increased here");
         }
       }
     });
   },
 };
+
 //===========================================
 //Spotlight
 //===========================================
@@ -414,9 +413,8 @@ function spotlightMove(e) {
 }
 
 .mapboxgl-popup {
-max-width: 200px;
+  max-width: 200px;
 }
-
 
 #character {
   background-color: transparent;
