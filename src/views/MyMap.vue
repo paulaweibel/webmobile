@@ -345,6 +345,9 @@ export default {
           character.style.zIndex = "0";
           document.getElementById("story").style.zIndex = "0";
           textField.style.zIndex = "0";
+          let url = "url('http:"+result.items[storypart].fields.crossedIcons.fields.file.url+"')";
+          markers[storypart].getElement().style.backgroundImage = url;
+          markers[storypart].getElement().style.backgroundColor = "red";
           storypart++;
           moveflag = true;
           if (storypart >= result.items.length) {
