@@ -52,7 +52,7 @@
 #nav a {
   font-size: 1.5em;
   position: relative;
-  z-index: 10;
+  z-index: 50;
   /* font-weight: bold; */
   color: #e1bc29;
   transition: 0.2s all;

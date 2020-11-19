@@ -281,7 +281,9 @@ export default {
         }
       }
 
+      changeView(0);
       function storyTelling(i) {
+        let story = document.getElementById("story");
         // console.log("trying to tell a story");
         //console.log(document.getElementById("story"))
         textField = document.getElementById("storytext");
@@ -290,35 +292,43 @@ export default {
           fullText = result.items[i].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
           //console.log(textElements);
+          character.setAttribute("class", "intro");
+          story.setAttribute("class", "intro");
+          textField.setAttribute("class", "intro");
         }
 
         //getting images from contentful
         let imgs = result.items[storypart].fields.img;
-        //console.log(storyCounter)
+        console.log(imgs);
         console.log("image counter is at: " + imgCounter);
 
         character = document.getElementById("character");
         textField.innerHTML = textElements[storyCounter];
         textField.style.zIndex = "21";
-        console.log(
-          storyCounter +
-            " Story counter and length textElements: " +
-            textElements.length
-        );
+
         if (textElements.length === imgs.length) {
           let url = "url(" + imgs[storyCounter].fields.file.url + ")";
           character.style.backgroundImage = url;
         } else {
-          //console.log(imgCounter);
           if (imgCounter <= 1 || textElements.length - 1 == storyCounter) {
-            //console.log("this should be happening");
             let url = "url( http:" + imgs[0].fields.file.url + ")";
-            //console.log(url)
+            //changing classes
+            if (storypart != 0) {
+              character.setAttribute("class", "purrlock");
+          story.setAttribute("class", "purrlock");
+          textField.setAttribute("class", "purrlock");
+            }
             character.style.backgroundImage = url;
-            //console.log(character);
-            //console.log("after assigning");
             imgCounter++;
           } else if (imgCounter == 2) {
+            if (storypart != 0) {
+              character.setAttribute(
+                "class",
+                "other, " + imgs[1].fields.file.fileName
+              );
+          story.setAttribute("class", "other, " + imgs[1].fields.file.fileName);
+          textField.setAttribute("class", "other, " + imgs[1].fields.file.fileName);
+            }
             let url = "url( 'http:" + imgs[1].fields.file.url + "')";
             character.style.backgroundImage = url;
             imgCounter--;
@@ -453,6 +463,10 @@ function spotlightMove(e) {
   right: 5%;
   text-align: center;
   color: azure;
+}
+
+#storytext.intro {
+  color:red;
 }
 </style>
 
