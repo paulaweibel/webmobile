@@ -564,12 +564,29 @@ function spotlightMove(e) {
 #storytext.intro {
   font-family: FilmNoir;
   color: white;
+  background-color: black;
+  font-size: 3em;
+  width: 100%;
+  top: 30%;
+  left: 0;
+  animation: scaleup 0.5s ease-in-out forwards; /* transition: 0.5s all; */
+}
+
+#storytext.story5 {
+  font-family: FilmNoir;
+  color: white;
   background-color: transparent;
   font-size: 3em;
   width: 100%;
   top: 30%;
   left: 0;
-  transition: 1s all;
+  animation: scaleup 0.5s ease-in-out forwards;  
+}
+
+@keyframes scaleup {
+  0%{transform: scale(0);}
+  100%{transform: scale(1);}
+  
 }
 </style>
 
