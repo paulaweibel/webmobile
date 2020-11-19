@@ -448,6 +448,10 @@ function spotlightMove(e) {
 #character.purrlock.story2 {
 }
 
+#character.other.story3 {
+
+}
+
 #story {
   background-color: var(--background);
   background-size: 100% 100%;
