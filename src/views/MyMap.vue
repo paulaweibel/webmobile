@@ -434,18 +434,22 @@ function spotlightMove(e) {
 #character {
   background-color: transparent;
   background-repeat: no-repeat;
-  background-position: center left;
+  background-position: bottom right;
   height: 100%;
   width: 100%;
   background-size: 50%;
-  bottom: -150px;
-  left: -50px;
+  bottom: 0%;
+  right: 0%;
   position: absolute;
   z-index: 0;
   background-image: unset;
 }
 
 #character.purrlock.story2 {
+}
+
+#character.other.story3 {
+
 }
 
 #story {
@@ -467,16 +471,19 @@ function spotlightMove(e) {
   z-index: 0;
   display: block;
   position: absolute;
-  width: 50%;
+  width: 30%;
   top: 20%;
-  right: 10%;
+  right: 35%;
   text-align: center;
-  color: azure;
+  padding: 20px;
+  background-color: whitesmoke;
+  color: black;
 }
 
 #storytext.intro {
   font-family: FilmNoir;
   color: white;
+  background-color: transparent;
   font-size: 3em;
   width: 100%;
   top: 30%;
