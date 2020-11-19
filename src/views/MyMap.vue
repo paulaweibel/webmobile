@@ -173,14 +173,14 @@ export default {
           el.style.borderColor = "var(--border)";
 
           if (index == 0) {
-            console.log("first element");
             let popup = new mapboxgl.Popup({ closeOnClick: true })
               .setHTML(
                 '<h1 style="color:var(--markedText); font-weight: bold;">Start Here!</h1>'
+                +'<p style="color:var(--markedText)">and follow the path</p>'
               )
               .setLngLat([
-                result.items[0].fields.location.lon,
-                result.items[0].fields.location.lat,
+                result.items[1].fields.location.lon,
+                result.items[1].fields.location.lat,
               ]);
             popup.addTo(map);
             popup.getElement().style.fontWeight = "bold";
@@ -230,7 +230,6 @@ export default {
       //===========================================
       //changes marker when hovering over it
       function markerHover(i) {
-        //console.log("hovering over marker " + i);
         markers[i].getElement().style.boxShadow =
           "0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow),0px 0px var(--shadowWidth) var(--markerShadow)";
       }
@@ -252,7 +251,6 @@ export default {
         //console.log(i, storypart);
         if (i === storypart) {
           character = document.getElementById("character");
-          //console.log("wtf, it gets stuck here and I don't know why");
           moveflag = false;
           character.style.zIndex = "25";
           let burl =
@@ -260,9 +258,6 @@ export default {
             result.items[i].fields.background.fields.file.url +
             "')";
           document.getElementById("story").style.backgroundImage = burl;
-          //console.log("trying to change zindex");
-          //console.log(character.style.getPropertyValue("z-index"));
-          //console.log(character);
           document.getElementById("story").style.zIndex = "20";
           if (storypart == 0)
             character.addEventListener("click", () => storyEvent(i));
@@ -284,14 +279,11 @@ export default {
       changeView(0);
       function storyTelling(i) {
         let story = document.getElementById("story");
-        // console.log("trying to tell a story");
-        //console.log(document.getElementById("story"))
         textField = document.getElementById("storytext");
         //splitting text into seperate Elements
         if (storyCounter == 0) {
           fullText = result.items[i].fields.text.content[0].content[0].value;
           textElements = fullText.split("@");
-          //console.log(textElements);
           character.setAttribute("class", "intro");
           story.setAttribute("class", "intro");
           textField.setAttribute("class", "intro");
@@ -315,8 +307,8 @@ export default {
             //changing classes
             if (storypart != 0) {
               character.setAttribute("class", "purrlock");
-          story.setAttribute("class", "purrlock");
-          textField.setAttribute("class", "purrlock");
+              story.setAttribute("class", "purrlock");
+              textField.setAttribute("class", "purrlock");
             }
             character.style.backgroundImage = url;
             imgCounter++;
@@ -326,8 +318,14 @@ export default {
                 "class",
                 "other, " + imgs[1].fields.file.fileName
               );
-          story.setAttribute("class", "other, " + imgs[1].fields.file.fileName);
-          textField.setAttribute("class", "other, " + imgs[1].fields.file.fileName);
+              story.setAttribute(
+                "class",
+                "other, " + imgs[1].fields.file.fileName
+              );
+              textField.setAttribute(
+                "class",
+                "other, " + imgs[1].fields.file.fileName
+              );
             }
             let url = "url( 'http:" + imgs[1].fields.file.url + "')";
             character.style.backgroundImage = url;
@@ -466,7 +464,7 @@ function spotlightMove(e) {
 }
 
 #storytext.intro {
-  color:red;
+  color: red;
 }
 </style>
 
