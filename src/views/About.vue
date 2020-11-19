@@ -77,7 +77,7 @@
           some time. The trail leads through the wild streets of Rossmoos
           Quarter in Emmenbrücke (Switzerland). <br /><br />
           The story is based on true events. Told by Mr. Purrlock. But confused
-          experts insist, the legends of purrlock have never happened. <br /><br />
+          experts insist, the legends of Purrlock have never happened. <br /><br />
           eh!<br /><br />
           what do they know.<br /><br />
           (meowthing at all.)
