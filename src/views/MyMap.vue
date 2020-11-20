@@ -308,7 +308,6 @@ let purrlockmark;
       //Story Methods
       //===========================================
       //Adding Elements to story div
-
       function changeView(i) {
         storyEnd = false;
         //console.log(i, storypart);
@@ -359,8 +358,6 @@ let purrlockmark;
           textElements = fullText.split("@");
           //getting images from contentful
           imgs = result.items[storypart].fields.img;
-          //        console.log(imgs);
-          //        console.log("image counter is at: " + imgCounter);
 
           character = document.getElementById("character");
           textField.style.zIndex = "30";
@@ -432,9 +429,6 @@ let purrlockmark;
 //===========================================
 //Spotlight
 //===========================================
-
-//Dont know why this spotlight method didn't work
-
 window.addEventListener("mousemove", (e) => {
   if (moveflag == true) {
     spotlightMove(e);
@@ -443,9 +437,9 @@ window.addEventListener("mousemove", (e) => {
 function spotlightMove(e) {
   let string =
     "radial-gradient(circle at " +
-    Math.round((e.pageX / window.innerWidth) * 100) +
+    (e.pageX / window.innerWidth) * 100 +
     "% " +
-    Math.round((e.pageY / window.innerHeight) * 100) +
+    (e.pageY / window.innerHeight) * 100 +
     "%,transparent var(--spotlightTransparent),var(--spotlightColor) var(--spotlightSize))";
   document.getElementById("spotlight").style.backgroundImage = string;
 }
