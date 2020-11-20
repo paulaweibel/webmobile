@@ -31,7 +31,6 @@ let moveflag = true;
 let fullText;
 let textElements;
 let textField;
-let trueOnce = true;
 let imgs;
 
 // @ is an alias to /src
@@ -322,10 +321,7 @@ let purrlockmark;
           document.getElementById("story").style.backgroundImage = burl;
           document.getElementById("story").style.zIndex = "20";
 
-          if (storypart == 0 && trueOnce) {
-            character.addEventListener("click", () => storyEvent());
-            trueOnce = false;
-          }
+         
 
           storyTelling(i);
         } else {
@@ -340,8 +336,11 @@ let purrlockmark;
           storyTelling();
         }
       }
+            document.getElementById("character").addEventListener("click", () => storyEvent());
 
       changeView(0);
+
+
       function storyTelling() {
         let story = document.getElementById("story");
         textField = document.getElementById("storytext");
@@ -399,13 +398,14 @@ let purrlockmark;
           }
         }
         if (storyCounter >= textElements.length) {
-          console.log("end of story part");
+          //console.log("end of story part");
           storyEnd = true;
           storyCounter = 0;
           imgCounter = 0;
           character.style.zIndex = "0";
           document.getElementById("story").style.zIndex = "0";
           textField.style.zIndex = "0";
+          //changes the map marker icon to the crossen one.
           let url =
             "url('http:" +
             result.items[storypart].fields.crossedIcons.fields.file.url +
@@ -419,7 +419,6 @@ let purrlockmark;
           }
         } else {
           storyCounter += 1;
-          console.log("story counter is increased here");
         }
       }
     });
