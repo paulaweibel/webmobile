@@ -88,7 +88,7 @@
     </div>
     <div class="credit"> 
       <p class="credit-infos">
-          Credits: <br> <br>Janine Richener, Lena Schütz, Paula Weibel <br />
+          Credits: <br>Janine Richener, Lena Schütz, Paula Weibel <br />
           Studio Web-Mobile, 2020
         </p>
     </div>
@@ -126,17 +126,16 @@ background-color: white;
 .credit{
   font-family: monospace;
   font-size: 1.2em;
-  position: absolute;
+  position: relative;
   height: 7em;
-  width:100%;
-  top: calc(60px + 3em + 61vw + 100vh);
   left:0px;
   background-color: black;
   overflow: hidden;
   text-align: left;
-  padding: 0 0 0 8vw;
-
+  padding-left: calc(10px + 8vw);
+  padding-right: calc(10px + 8vw);
 }
+
 .about-background {
   position: absolute;
   top: 0;
